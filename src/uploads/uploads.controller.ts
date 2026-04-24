@@ -14,8 +14,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadsService } from './uploads.service';
 import { uploadSchema } from './dto/upload.dto';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { AuthGuard } from '../auth/guards/auth.guard';
+import { CurrentUser } from 'src/app/auth'; 
+import { AuthGuard } from 'src/app/auth'; 
 import { CustomResponseInterceptor } from '../interceptors/api-response.interceptor';
 import { ZodValidationPipe } from '../infrastructure/pipeline/validation.pipeline';
 import type { JwtPayload } from '../interfaces/users/jwt.type';
