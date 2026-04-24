@@ -20,7 +20,6 @@ export class EmailService {
 
   constructor(private email: EmailTemplateService) {
     this.templateBasePath = this.resolveTemplateBasePath();
-    // Register partials when the service is instantiated
     this.registerPartials();
   }
 
@@ -30,62 +29,46 @@ export class EmailService {
 
   private registerPartials() {
     if (this.partialsRegistered) return;
-
     try {
       const partialsDir = path.join(this.templateBasePath, 'partials');
-
       const headerPath = path.join(partialsDir, 'header.hbs');
       const footerPath = path.join(partialsDir, 'footer.hbs');
-
-      // Check if files exist before trying to read them
       if (fs.existsSync(headerPath)) {
-        const headerContent = fs.readFileSync(headerPath, 'utf8');
-        Handlebars.registerPartial('header', headerContent);
-        console.log('✅ Header partial registered successfully');
-      } else {
-        console.warn('⚠️ Header partial not found at:', headerPath);
+        Handlebars.registerPartial(
+          'header',
+          fs.readFileSync(headerPath, 'utf8'),
+        );
       }
-
       if (fs.existsSync(footerPath)) {
-        const footerContent = fs.readFileSync(footerPath, 'utf8');
-        Handlebars.registerPartial('footer', footerContent);
-        console.log('✅ Footer partial registered successfully');
-      } else {
-        console.warn('⚠️ Footer partial not found at:', footerPath);
+        Handlebars.registerPartial(
+          'footer',
+          fs.readFileSync(footerPath, 'utf8'),
+        );
       }
-
       this.partialsRegistered = true;
     } catch (error) {
-      console.error('❌ Error registering partials:', error);
+      console.error('Error registering partials:', error);
     }
   }
 
-  private renderHtmlTemplates = (template: string, data: any) => {
-    // Ensure partials are registered before rendering
+  private renderHtmlTemplates(
+    template: string,
+    data: Record<string, unknown>,
+  ): string {
     this.registerPartials();
-
     const filePath = path.join(this.templateBasePath, `${template}.hbs`);
-
-    try {
-      if (!fs.existsSync(filePath)) {
-        throw new Error(`Template file not found: ${filePath}`);
-      }
-
-      const source = fs.readFileSync(filePath, 'utf8');
-      Handlebars.registerHelper('splitToken', function (token) {
-        return token ? token.split('') : [];
-      });
-      const handleBarsTemplate = Handlebars.compile(source);
-      return handleBarsTemplate(data);
-    } catch (error) {
-      console.error(`❌ Error rendering template ${template}:`, error);
-      throw error;
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Template file not found: ${filePath}`);
     }
-  };
+    const source = fs.readFileSync(filePath, 'utf8');
+    Handlebars.registerHelper('splitToken', (token: string) =>
+      token ? token.split('') : [],
+    );
+    return Handlebars.compile(source)(data);
+  }
 
-  // ... rest of your methods remain the same
   create() {
-    this.email.sendEmailTemplate({
+    void this.email.sendEmailTemplate({
       to: 'praiseleye.pl@gmail.com',
       subject: 'Test',
       html: this.renderHtmlTemplates('welcome-user', {
@@ -99,10 +82,6 @@ export class EmailService {
   async sendVerifyUserEmail(
     sendVerifyUserEmailDto: IUser & { token?: string },
   ) {
-    console.log(
-      '🚀 ~ EmailService ~ sendVerifyUserEmailDto:',
-      sendVerifyUserEmailDto,
-    );
     await this.email.sendEmailTemplate({
       to: sendVerifyUserEmailDto.email,
       subject: 'Verify your email',
@@ -144,8 +123,21 @@ export class EmailService {
     });
   }
 
+  @OnEvent('user.invite')
+  async sendInviteEmail(payload: {
+    email: string;
+    role: string;
+    inviteLink: string;
+  }) {
+    await this.email.sendEmailTemplate({
+      to: payload.email,
+      subject: `You've been invited to join Agromart as ${payload.role}`,
+      html: this.renderHtmlTemplates('invite', { ...payload }),
+    });
+  }
+
   send() {
-    this.email.sendEmailTemplate({
+    void this.email.sendEmailTemplate({
       to: ['goodnessjohn156@gmail.com'],
       subject: 'Test',
       html: this.renderHtmlTemplates('welcome-user', {

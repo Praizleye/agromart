@@ -1,21 +1,24 @@
 export enum RoleNameType {
-  Tenant = 'tenant',
-  Landlord = 'landlord',
-  Agent = 'agent',
+  SuperAdmin = 'super_admin',
   Admin = 'admin',
-  Super_admin = 'super_admin',
+  Aggregator = 'aggregator',
+  Logistics = 'logistics',
+  User = 'user',
 }
 
-/** Roles that cannot be self-assigned — users must be invited */
 export const PROTECTED_ROLES: RoleNameType[] = [
+  RoleNameType.SuperAdmin,
   RoleNameType.Admin,
-  RoleNameType.Super_admin,
+  RoleNameType.Aggregator,
+  RoleNameType.Logistics,
 ];
 
-export type RoleReturned = {
-  id: string;
-  name: RoleNameType;
-  description?: string;
-  created_at: Date;
-  updated_at: Date;
-};
+export const SUPER_ADMIN_INVITABLE: RoleNameType[] = [
+  RoleNameType.Admin,
+  RoleNameType.Aggregator,
+];
+
+export const ADMIN_INVITABLE: RoleNameType[] = [
+  RoleNameType.Aggregator,
+  RoleNameType.Logistics,
+];

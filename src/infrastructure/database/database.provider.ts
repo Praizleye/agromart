@@ -14,9 +14,9 @@ const connectionProvider = {
 
     const pool = new Pool({
       connectionString: databaseConfiguration,
-      ssl: false,
+      ssl: { rejectUnauthorized: false },
       allowExitOnIdle: true,
-      connectionTimeoutMillis: 72000, //
+      connectionTimeoutMillis: 72000,
     });
     logger.log(`Database connection established:`);
     return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;

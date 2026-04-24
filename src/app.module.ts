@@ -1,13 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { LoggerModule } from './infrastructure/logger/logger.module';
-import { EmailModule } from './notification/features/email/email.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { SuperAdminModule } from './actors/super-admin/super-admin.module';
+import { AdminModule } from './actors/admin/admin.module';
+import { AggregatorModule } from './actors/aggregator/aggregator.module';
+import { LogisticsModule } from './actors/logistics/logistics.module';
+import { UserModule } from './actors/user/user.module';
+import { InvitationsModule } from './invitations/invitations.module';
+import { UploadsModule } from './uploads/uploads.module';
+import { EventsModule } from './events/events.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
+import { LoggerModule } from './infrastructure/logger/logger.module';
 import { databaseConfig } from './infrastructure/config/database.config';
 import { zohoConfig } from './infrastructure/config/zoho.config';
+import { EmailModule } from './notification/features/email/email.module';
 
 @Module({
   imports: [
@@ -16,10 +25,19 @@ import { zohoConfig } from './infrastructure/config/zoho.config';
       load: [databaseConfig, zohoConfig],
       envFilePath: ['.env'],
     }),
-    DatabaseModule,
     EventEmitterModule.forRoot(),
+    DatabaseModule,
     LoggerModule,
     EmailModule,
+    EventsModule,
+    AuthModule,
+    InvitationsModule,
+    SuperAdminModule,
+    AdminModule,
+    AggregatorModule,
+    LogisticsModule,
+    UserModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
