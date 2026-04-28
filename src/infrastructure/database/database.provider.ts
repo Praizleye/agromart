@@ -10,7 +10,15 @@ const connectionProvider = {
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) => {
     const logger = new Logger('DatabaseModule');
-    const databaseConfiguration = configService.get<string>('DBConfig.url');
+    const rawUrl = configService.get<string>('DBConfig.url') as string;
+    const normalized = rawUrl.replace(
+      /sslmode=(require|prefer|verify-ca)/g,
+      'sslmode=verify-full',
+    );
+    const databaseConfiguration =
+      normalized === rawUrl && !rawUrl.includes('sslmode')
+        ? `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}sslmode=verify-full`
+        : normalized;
 
     const pool = new Pool({
       connectionString: databaseConfiguration,
