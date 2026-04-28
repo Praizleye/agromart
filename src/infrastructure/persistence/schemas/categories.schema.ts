@@ -12,7 +12,7 @@ export const categories = pgTable(
   'categories',
   {
     id: serial().primaryKey().notNull(),
-    name: text().notNull(),
+    name: text().notNull().unique(),
     slug: text().notNull().unique(),
     created_by: integer().references(() => users.id, { onDelete: 'cascade' }),
     // icon_url: text(),
