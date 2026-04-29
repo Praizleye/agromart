@@ -5,15 +5,14 @@ import { DATABASE_CONNECTION } from 'src/infrastructure/database/database.provid
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { asc, desc, eq, sql } from 'drizzle-orm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PaginationDto } from './dto/get-category.dto';
-import { id } from 'zod/v4/locales';
+import { PaginationDto } from 'src/infrastructure/helper/pagination.helper';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-        @Inject(DATABASE_CONNECTION)
-        private readonly db: NodePgDatabase<typeof schema>,
-        private readonly eventEmitter: EventEmitter2,
+    @Inject(DATABASE_CONNECTION)
+    private readonly db: NodePgDatabase<typeof schema>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
   private async findByCategory(category: string) {
     return (
@@ -21,7 +20,9 @@ export class CategoriesService {
         await this.db
           .select()
           .from(schema.categories)
-          .where(eq(sql`lower(${schema.categories.name})`, category.toLowerCase()))
+          .where(
+            eq(sql`lower(${schema.categories.name})`, category.toLowerCase()),
+          )
       )[0] ?? null
     );
   }
@@ -53,7 +54,6 @@ export class CategoriesService {
       data: category,
       success: true,
     };
-    
   }
 
   async findAll(dto: PaginationDto) {
@@ -62,16 +62,15 @@ export class CategoriesService {
 
     const [categories, total] = await this.db.transaction(async (tx) => {
       const categories = await tx
-        .select({id: schema.categories.id,   name: schema.categories.name })
+        .select({ id: schema.categories.id, name: schema.categories.name })
         .from(schema.categories)
         .orderBy(
           sort_order === 'asc'
             ? asc(schema.categories.created_at)
-            : desc(schema.categories.created_at)
+            : desc(schema.categories.created_at),
         )
         .limit(limit)
         .offset(offset);
-
 
       const totalResult = await tx
         .select({ count: sql`count(*)` })
