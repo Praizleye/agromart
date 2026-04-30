@@ -8,16 +8,6 @@
     "extension": "",
     "files": [
         {
-            "date": 1777070616201,
-            "name": "./tmp/test-2026-04-24.log.0",
-            "hash": "a2d42594f96e303222b9b6163cad38f8"
-        },
-        {
-            "date": 1777071316569,
-            "name": "./tmp/test-2026-04-24.log.2026",
-            "hash": "33750d095df4ac29f2561aebeb5e13e3"
-        },
-        {
             "date": 1777071611824,
             "name": "./tmp/test-2026-04-25.log.0",
             "hash": "15f93b76d262a385838029f2a7bed26d"
@@ -56,6 +46,16 @@
             "date": 1777419092820,
             "name": "./tmp/test-2026-04-29.log.2026",
             "hash": "ed420f3a65ab7a8e3b8b95930e1e521b"
+        },
+        {
+            "date": 1777515778071,
+            "name": "./tmp/test-2026-04-30.log.0",
+            "hash": "4fb79c94a89ade8261e720e5ab3ec14b"
+        },
+        {
+            "date": 1777515956076,
+            "name": "./tmp/test-2026-04-30.log.2026",
+            "hash": "5b4c10dea9efe0537887ff91e34b5928"
         }
     ]
 }

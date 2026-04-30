@@ -159,6 +159,15 @@ export class FarmsService {
       .where(eq(schema.farms.id, id))
       .returning();
 
+      this.eventEmitter.emit('farm.updated', {
+        id: updatedFarm.id,
+        name: updatedFarm.name,
+        description: updatedFarm.description,
+        address: updatedFarm.address,
+        phone: updatedFarm.phone,
+        email: updatedFarm.email,
+      });
+
     return {
       message: 'Farm updated successfully.',
       data: updatedFarm,
@@ -166,7 +175,29 @@ export class FarmsService {
     };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} farm`;
+  async remove(id: number) {
+    const farm = await this.findById(id);
+    if (!farm) {
+      throw new Error('Farm not found');
+    }
+    await this.db
+    .delete(schema.farms)
+    .where(eq(schema.farms.id, id))
+    .execute();
+
+    this.eventEmitter.emit('farm.deleted', {
+      id: farm.id,
+      name: farm.name,
+      description: farm.description,
+      address: farm.address,
+      phone: farm.phone,
+      email: farm.email,
+    });
+
+    return {
+      message: 'Farm removed successfully.',
+      data: farm,
+      success: true,
+    };
   }
 }

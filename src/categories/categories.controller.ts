@@ -6,7 +6,7 @@ import { AuthGuard, CurrentUser, Roles, RolesGuard } from 'src/app/auth';
 import { RoleNameType } from 'src/interfaces/users';
 import type { JwtPayload } from 'src/interfaces/users/jwt.type';
 import { CustomResponseInterceptor } from 'src/interceptors/api-response.interceptor';
-import { paginationDto } from './dto/get-category.dto';
+import { paginationDto } from 'src/infrastructure/helper/pagination.helper';
 
 @Controller('categories')
 @UseInterceptors(CustomResponseInterceptor)

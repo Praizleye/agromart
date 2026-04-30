@@ -37,7 +37,7 @@ export class FarmsController {
 
   @Get()
   @UseGuards(AuthGuard)
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard) 
   @Roles(RoleNameType.Admin)
   @UsePipes(new ZodValidationPipe(paginationDto))
   findAll(@Body() dto: any) {
@@ -46,7 +46,7 @@ export class FarmsController {
 
   @Get(':id')
   @UseGuards(AuthGuard)
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard) 
   @Roles(RoleNameType.Admin)
   findOne(@Param('id') id: string) {
     return this.farmsService.findOne(+id);
