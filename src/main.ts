@@ -1,12 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-  logger.log('Creating Nest application...');
+// Use synchronous stderr writes during bootstrap so pino/buffering can't swallow them.
+const log = (msg: string) => process.stderr.write(`[bootstrap] ${msg}\n`);
 
-  const app = await NestFactory.create(AppModule);
+log(`node version=${process.version} pid=${process.pid}`);
+log(`PORT env=${process.env.PORT ?? '(unset)'}`);
+
+async function bootstrap() {
+  log('creating Nest application...');
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: false,
+  });
 
   app.enableCors({
     origin: true,
@@ -16,12 +21,21 @@ async function bootstrap() {
   });
 
   const port = Number(process.env.PORT) || 3000;
+  log(`calling app.listen(${port}, '0.0.0.0')...`);
   await app.listen(port, '0.0.0.0');
-  logger.log(`Application listening on 0.0.0.0:${port}`);
+  log(`listening on 0.0.0.0:${port}`);
 }
 
+process.on('uncaughtException', (err) => {
+  process.stderr.write(`[bootstrap] uncaughtException: ${err?.stack ?? err}\n`);
+  process.exit(1);
+});
+process.on('unhandledRejection', (err) => {
+  process.stderr.write(`[bootstrap] unhandledRejection: ${(err as Error)?.stack ?? err}\n`);
+  process.exit(1);
+});
+
 bootstrap().catch((err) => {
-  // eslint-disable-next-line no-console
-  console.error('Bootstrap failed:', err);
+  process.stderr.write(`[bootstrap] failed: ${err?.stack ?? err}\n`);
   process.exit(1);
 });
