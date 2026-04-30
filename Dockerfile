@@ -20,6 +20,6 @@ RUN pnpm build
 # Remove dev deps after build
 RUN pnpm prune --prod
 
-EXPOSE 5687
+EXPOSE 3000
 
 CMD ["sh", "-c", "node dist/main"]
