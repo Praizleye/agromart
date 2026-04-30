@@ -16,7 +16,7 @@
         "numReplicas": 1
       }
     },
-    "startCommand": "node dist/main.js",
+    "startCommand": "npx drizzle-kit migrate --config=drizzle.config.ts && node dist/main.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }
