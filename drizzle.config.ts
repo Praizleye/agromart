@@ -9,19 +9,29 @@ const nestLibPath = path.resolve(
 );
 
 function withSslMode(url: string): string {
-  const normalized = url.replace(/sslmode=(require|prefer|verify-ca)/g, 'sslmode=verify-full');
-  if (normalized === url && !url.includes('sslmode')) {
-    const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}sslmode=verify-full`;
+  const parsed = new URL(url);
+
+  // Make pg-connection-string semantics explicit across runtime versions.
+  parsed.searchParams.set('uselibpqcompat', 'true');
+  parsed.searchParams.set('sslmode', 'require');
+
+  return parsed.toString();
+}
+
+function getDatabaseUrl(): string {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL is missing. Set it in your environment before running migrations.');
   }
-  return normalized;
+
+  return withSslMode(databaseUrl);
 }
 
 export default defineConfig({
   schema: `${nestLibPath}/*.schema.ts`,
   dialect: 'postgresql',
   dbCredentials: {
-    url: withSslMode(process.env.DATABASE_URL as string),
+    url: getDatabaseUrl(),
   },
   out: './src/infrastructure/persistence/migrations',
   migrations: {
