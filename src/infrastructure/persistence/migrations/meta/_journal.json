@@ -15,6 +15,13 @@
       "when": 1777372982394,
       "tag": "0001_puzzling_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777556893626,
+      "tag": "0002_lying_rick_jones",
+      "breakpoints": true
     }
   ]
 }

@@ -34,7 +34,7 @@ export class CategoriesService {
           .select()
           .from(schema.categories)
           .where(
-            eq(sql`lower(${schema.categories.id})`, id),
+            eq(schema.categories.id, id),
           )
       )[0] ?? null
     );
