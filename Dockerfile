@@ -27,4 +27,4 @@ RUN pnpm prune --prod
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx drizzle-kit migrate --config=drizzle.config.ts && node dist/main.js"]
+CMD ["sh", "-c", "node dist/main.js"]
