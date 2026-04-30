@@ -27,12 +27,23 @@ export class CategoriesService {
     );
   }
 
+  async findByCategoryId(id: number) {
+    return (
+      (
+        await this.db
+          .select()
+          .from(schema.categories)
+          .where(
+            eq(sql`lower(${schema.categories.id})`, id),
+          )
+      )[0] ?? null
+    );
+  }
   async create(dto: CreateCategoryDto, userId: number) {
     const existingCategory = await this.findByCategory(dto.category_name);
     if (existingCategory) {
       throw new Error('Category already exists');
     }
-    console.log('Creating category with name:', dto.category_name);
     const [category] = await this.db
       .insert(schema.categories)
       .values({

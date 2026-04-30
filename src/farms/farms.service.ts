@@ -45,7 +45,7 @@ export class FarmsService {
     );
   }
 
-  private async findById(id: number) {
+  async findFarmById(id: number) {
     return (
       (
         await this.db.select().from(schema.farms).where(eq(schema.farms.id, id))
@@ -149,7 +149,7 @@ export class FarmsService {
   }
 
   async update(id: number, dto: UpdateFarmDto) {
-    const farm = await this.findById(id);
+    const farm = await this.findFarmById(id);
     if (!farm) {
       throw new Error('Farm not found');
     }
@@ -176,7 +176,7 @@ export class FarmsService {
   }
 
   async remove(id: number) {
-    const farm = await this.findById(id);
+    const farm = await this.findFarmById(id);
     if (!farm) {
       throw new Error('Farm not found');
     }

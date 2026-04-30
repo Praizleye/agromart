@@ -12,5 +12,6 @@ import { accessJwtConfig } from 'src/app/auth/config/access-jwt';
     DatabaseModule],
   controllers: [CategoriesController],
   providers: [CategoriesService, AuthGuard, RolesGuard],
+  exports: [CategoriesService],
 })
 export class CategoriesModule {}

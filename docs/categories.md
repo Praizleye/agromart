@@ -13,17 +13,13 @@ Create a new product category. Only admins can create categories.
 **Request body:**
 ```json
 {
-  "category_name": "Fresh Vegetables",
-  "slug": "fresh-vegetables",
-  "description": "All fresh vegetables from our farms"
+  "category_name": "Fresh Vegetables"
 }
 ```
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
 | category_name | string | Yes | Unique category name |
-| slug | string | Yes | URL-friendly identifier (unique, lowercase with hyphens) |
-| description | string | No | Category description |
 
 **Response 201:**
 ```json
@@ -56,18 +52,20 @@ Retrieve all categories with pagination. No authentication required.
 
 **Auth required:** No
 
-**Query parameters:**
+**Request body:**
+```json
+{
+  "page": 1,
+  "limit": 10,
+  "sort_order": "desc"
+}
+```
 
-| Param | Type | Required | Notes |
+| Field | Type | Required | Notes |
 |---|---|---|---|
 | page | number | No | Page number (default: 1) |
 | limit | number | No | Items per page (default: 10) |
-| search | string | No | Search categories by name |
-
-**Example:**
-```
-GET /categories?page=1&limit=10&search=vegetables
-```
+| sort_order | string | No | "asc" or "desc" (default: "asc") |
 
 **Response 200:**
 ```json
@@ -95,11 +93,10 @@ GET /categories?page=1&limit=10&search=vegetables
       "deleted_at": null
     }
   ],
-  "pagination": {
+  "meta": {
     "total": 2,
     "page": 1,
-    "limit": 10,
-    "pages": 1
+    "last_page": 1
   },
   "success": true
 }

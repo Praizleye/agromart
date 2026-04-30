@@ -13,5 +13,6 @@ import { AuthGuard, RolesGuard } from 'src/app/auth';
   ],
   controllers: [FarmsController],
   providers: [FarmsService, AuthGuard, RolesGuard],
+  exports: [FarmsService],
 })
 export class FarmsModule {}
