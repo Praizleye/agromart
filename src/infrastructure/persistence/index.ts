@@ -4,3 +4,7 @@ export * from './schemas/password_resets.schema';
 export * from './schemas/file.schema';
 export * from './schemas/invitations.schema';
 export * from './schemas/extended_profiles.schema';
+export * from './schemas/categories.schema';
+export * from './schemas/products.schema';
+export * from './schemas/farm.schema';
+export * from './schemas/product-images.schema';

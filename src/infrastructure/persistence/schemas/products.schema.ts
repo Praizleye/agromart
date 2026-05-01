@@ -1,30 +1,30 @@
 import {
   integer,
-  pgEnum,
   pgTable,
   serial,
   text,
-  varchar,
+  decimal,
+  boolean,
 } from 'drizzle-orm/pg-core';
 import { timestamps } from '../../helper/column.helper';
-import { users } from './users.schema';
-
-export const filePurposeEnum = pgEnum('file_purpose', [
-  'profile_picture',
-  'cac_document',
-  'drivers_license',
-  'other',
-]);
+import { farms } from './farm.schema';
+import { categories } from './categories.schema';
 
 export const products = pgTable('products', {
-  id: serial().primaryKey(),
-  user_id: integer()
-    .references(() => users.id, { onDelete: 'cascade' })
-    .notNull(),
+  id: serial().primaryKey().notNull(),
   name: text().notNull(),
   description: text(),
-  price: integer().notNull(),
-  quantity: integer().notNull(),
-  category: varchar({ length: 100 }),
+  sku: text().unique(),
+  farm_id: integer()
+    .notNull()
+    .references(() => farms.id, { onDelete: 'cascade' }),
+  category_id: integer()
+    .notNull()
+    .references(() => categories.id, { onDelete: 'restrict' }),
+  price: decimal({ precision: 10, scale: 2 }).notNull(),
+  quantity_in_stock: integer().notNull().default(0),
+  unit: text().notNull().default('kg'), // kg, liter, piece, etc.
+  minimum_order_quantity: integer().default(1),
+  is_available: boolean().notNull().default(true),
   ...timestamps,
 });
