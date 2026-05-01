@@ -16,6 +16,9 @@ import { DatabaseModule } from './infrastructure/database/database.module';
 import { LoggerModule } from './infrastructure/logger/logger.module';
 import { databaseConfig } from './infrastructure/config/database.config';
 import { EmailModule } from './notification/features/email/email.module';
+import { CategoriesModule } from './categories/categories.module';
+import { FarmsModule } from './farms/farms.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -37,6 +40,9 @@ import { EmailModule } from './notification/features/email/email.module';
     LogisticsModule,
     UserModule,
     UploadsModule,
+    CategoriesModule,
+    FarmsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
