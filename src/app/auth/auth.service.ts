@@ -61,6 +61,22 @@ export class AuthService {
     );
   }
 
+  private async findByPhone(phone: string, countryCode: string) {
+    return (
+      (
+        await this.db
+          .select()
+          .from(schema.users)
+          .where(
+            and(
+              eq(schema.users.phone, phone),
+              eq(schema.users.country_code, countryCode),
+            ),
+          )
+      )[0] ?? null
+    );
+  }
+
   private async generateJwtTokens(user: {
     id: number;
     email: string;
@@ -122,6 +138,16 @@ export class AuthService {
         message: 'An account with this email already exists.',
         success: false,
       });
+    }
+
+    if (dto.phone && dto.country_code) {
+      const phoneExists = await this.findByPhone(dto.phone, dto.country_code);
+      if (phoneExists) {
+        throw new BadRequestException({
+          message: 'An account with this phone number already exists.',
+          success: false,
+        });
+      }
     }
 
     const hashedPassword = await this.hashPassword(dto.password);
@@ -460,6 +486,16 @@ export class AuthService {
         message: 'This email is already registered.',
         success: false,
       });
+    }
+
+    if (dto.phone && dto.country_code) {
+      const phoneExists = await this.findByPhone(dto.phone, dto.country_code);
+      if (phoneExists) {
+        throw new BadRequestException({
+          message: 'An account with this phone number already exists.',
+          success: false,
+        });
+      }
     }
 
     const hashedPassword = await this.hashPassword(dto.password);

@@ -24,7 +24,7 @@ export class EmailService {
   }
 
   private resolveTemplateBasePath(): string {
-    return path.resolve(__dirname, '..', '..', '..', '..', 'assets', 'views');
+    return path.resolve(__dirname, '..', '..', '..', 'assets', 'views');
   }
 
   private registerPartials() {

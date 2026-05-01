@@ -1,0 +1,15 @@
+# Use this workspace to collaborate
+workspace:
+  id: 07500e2a-e915-46a4-96da-9bf8bb7a61f1
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Agromart API (Documented Endpoints): f2f6379b-b531-4202-b08f-b3bcd0535db5
+
+# All resources in the `postman/` folder are automatically registered in Local View.
+# Point to additional files outside the `postman/` folder to register them individually. Example:
+#localResources:
+#  collections:
+#    - ../tests/E2E Test Collection/
